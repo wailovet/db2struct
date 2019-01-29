@@ -91,7 +91,7 @@ func Generate(columnTypes map[string]map[string]string, tableName string, struct
 		importList = append(importList, "\"time\"")
 	}
 
-	if strings.Index(dbTypes, sqlNullInt) > -1 {
+	if strings.Index(dbTypes, sqlNullInt) > -1 || strings.Index(dbTypes, sqlNullFloat) > -1 || strings.Index(dbTypes, sqlNullString) > -1 {
 		importList = append(importList, "\"database/sql\"")
 	}
 
