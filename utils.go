@@ -84,8 +84,28 @@ var Debug = false
 func Generate(columnTypes map[string]map[string]string, tableName string, structName string, pkgName string, jsonAnnotation bool, gormAnnotation bool, gureguTypes bool) ([]byte, error) {
 	var dbTypes string
 	dbTypes = generateMysqlTypes(columnTypes, 0, jsonAnnotation, gormAnnotation, gureguTypes)
-	src := fmt.Sprintf("package %s\ntype %s %s}",
+
+	importText := ""
+	var importList []string
+	if strings.Index(dbTypes, golangTime) > -1 {
+		importList = append(importList, "\"time\"")
+	}
+
+	if strings.Index(dbTypes, sqlNullInt) > -1 || strings.Index(dbTypes, sqlNullFloat) > -1 || strings.Index(dbTypes, sqlNullString) > -1 {
+		importList = append(importList, "\"database/sql\"")
+	}
+
+	if len(importList) > 0 {
+		if len(importList) > 1 {
+			importText = fmt.Sprintf("import(%s)", strings.Join(importList, "\n"))
+		} else {
+			importText = fmt.Sprintf("import %s ", importList[0])
+		}
+	}
+
+	src := fmt.Sprintf("package %s\n%s\ntype %s %s}",
 		pkgName,
+		importText,
 		structName,
 		dbTypes)
 	if gormAnnotation == true {
