@@ -98,13 +98,15 @@ func generateMysqlTypes(obj map[string]map[string]string, depth int, jsonAnnotat
 		if jsonAnnotation == true {
 			annotations = append(annotations, fmt.Sprintf("json:\"%s\"", key))
 		}
+
 		comment := mysqlType["comment"]
+		annotations = append(annotations, fmt.Sprintf("comment:\"%s\"", comment))
 		if len(annotations) > 0 {
-			structure += fmt.Sprintf("\n%s %s `%s` /* %s */",
+			structure += fmt.Sprintf("\n%s %s `%s`",
 				fieldName,
 				valueType,
 				strings.Join(annotations, " "),
-				comment)
+				)
 
 		} else {
 			structure += fmt.Sprintf("\n%s %s",
