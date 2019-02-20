@@ -68,9 +68,20 @@ func generateMysqlTypes(obj map[string]map[string]string, depth int, jsonAnnotat
 
 	keys := make([]string, 0, len(obj))
 	for key := range obj {
-		keys = append(keys, key)
+		if key != "ID" && key != "UpdatedAt" && key != "CreatedAt" && key != "DeletedAt" {
+			keys = append(keys, key)
+		}
 	}
 	sort.Strings(keys)
+
+	for key := range obj {
+		if key == "ID" {
+			keys = append([]string{key}, keys...)
+		}
+		if key == "UpdatedAt" || key == "CreatedAt" || key == "DeletedAt" {
+			keys = append(keys, key)
+		}
+	}
 
 	for _, key := range keys {
 		mysqlType := obj[key]
@@ -106,7 +117,7 @@ func generateMysqlTypes(obj map[string]map[string]string, depth int, jsonAnnotat
 				fieldName,
 				valueType,
 				strings.Join(annotations, " "),
-				)
+			)
 
 		} else {
 			structure += fmt.Sprintf("\n%s %s",
