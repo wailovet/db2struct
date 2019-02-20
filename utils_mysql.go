@@ -68,21 +68,21 @@ func generateMysqlTypes(obj map[string]map[string]string, depth int, jsonAnnotat
 
 	keys := make([]string, 0, len(obj))
 	for key := range obj {
-		if key != "ID" && key != "UpdatedAt" && key != "CreatedAt" && key != "DeletedAt" {
+		if key != "id" && key != "created_at" && key != "updated_at" && key != "deleted_at" {
 			keys = append(keys, key)
 		}
 	}
 	sort.Strings(keys)
 
 	for key := range obj {
-		if key == "ID" {
+		if key == "id" {
 			keys = append([]string{key}, keys...)
 		}
-		if key == "UpdatedAt" || key == "CreatedAt" || key == "DeletedAt" {
+		if key == "created_at" || key == "deleted_at" || key == "updated_at" {
 			keys = append(keys, key)
 		}
 	}
-
+	println(strings.Join(keys,","))
 	for _, key := range keys {
 		mysqlType := obj[key]
 		nullable := false
