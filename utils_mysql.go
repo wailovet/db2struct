@@ -82,7 +82,7 @@ func generateMysqlTypes(obj map[string]map[string]string, depth int, jsonAnnotat
 			keys = append(keys, key)
 		}
 	}
-	println(strings.Join(keys,","))
+	//println(strings.Join(keys,","))
 	for _, key := range keys {
 		mysqlType := obj[key]
 		nullable := false
